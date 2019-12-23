@@ -35,7 +35,7 @@ def draw_picture(f):
                 bit.style = inactive
 
     input.draw(f)
-    draw_label(f, input.lt, r'\texttt{input} --- bit layout of single 64-bit subword of AVX512 register', 'anchor=south west')
+    draw_label(f, input.lt, r'\texttt{input}', 'anchor=south west')
     for i, byte in enumerate(input.byte):
         draw_horiz_brace(f, byte.right.x, byte.left.x, byte.bottom.y,
                          f'$b_{i}$ = 0x{byte.value:02x}', 'below')
@@ -50,7 +50,7 @@ def draw_picture(f):
                 bit.style = inactive
 
     mask.draw(f)
-    draw_label(f, mask.lt, r'\texttt{mask} --- left single bit in each nibble', 'anchor=south west')
+    draw_label(f, mask.lt, r'\texttt{mask}', 'anchor=south west')
 
     y -= 2.5*h
 

@@ -43,7 +43,7 @@ class SharedByte(Rectangle):
                     (self.style, self.x, self.y, self.x + self.w, self.y + self.h))
         
 
-def draw_picture(f):
+def draw_byte_layout(f):
     x = 0.0
     y = 0.0
     w_byte = 14
@@ -83,14 +83,15 @@ def draw_picture(f):
     sum37.draw(f)
     draw_label(f, sum37.left, r'\texttt{sum37}', 'left')
 
-    for i in range(0, 64, 8):
-        qb0 = sum37.byte[i]
-        qb7 = sum37.byte[i + 7]
-        draw_horiz_brace(f, qb0.right.x, qb7.left.x, sum37.bottom.y, f'qword {i//8}', 'below')
 
-    y = y - 6*H
+def draw_reshuffled(f):
+    x = 0.0
+    y = 0.0
+    w_byte = 14
+    h = 1.5 * w_byte/64
+    H = 2.5 * w_byte/64
 
-    def reshuffled(y, bits):
+    def reshuffled(y, bits, label):
         reg = AVX512Reg(x, y, w_byte, h, WHOLE_BYTE)
         for i in range(0, 64):
             q = i // 8
@@ -100,35 +101,20 @@ def draw_picture(f):
                 reg.byte[i].style = inactive
 
         reg.draw(f)
+        draw_label(f, reg.left, label, 'left')
 
-    reshuffled(y - 0*H, (0, 4))
-    reshuffled(y - 1*H, (1, 5))
-    reshuffled(y - 2*H, (2, 6))
-    reshuffled(y - 3*H, (3, 7))
-
-    y = y - 5*H
-
-    reshuffled(y - 0*H, (0, 4, 1, 5))
-    reshuffled(y - 1*H, (2, 6, 3, 7))
-
-    y = y - 3*H
-
-    result = AVX512Reg(x, y, w_byte, h, WHOLE_BYTE)
-    for i in range(0, 64):
-        q = i // 8
-        if i % 8 == 0:
-            result.byte[i].style = color(q, 100)
-        else:
-            result.byte[i].style = inactive
-
-    result.draw(f)
+    reshuffled(y - 0*H, (0, 4, 1, 5), r'\texttt{g0}')
+    reshuffled(y - 1*H, (2, 6, 3, 7), r'\texttt{g1}')
+    reshuffled(y - 2*H, (0, 1, 2, 4, 5, 6, 7), r'\texttt{t0}')
 
 
 if __name__ == '__main__':
     buf = StringIO()
     buf.write(r"\begin{tikzpicture}")
-    draw_picture(File(buf))
+    name = "draw_%s" % sys.argv[1].replace('-', '_')
+    draw_func = globals()[name]
+    draw_func(File(buf))
     buf.write(r"\end{tikzpicture}")
 
-    with open(sys.argv[1], 'wt') as f:
+    with open(sys.argv[2], 'wt') as f:
         f.write(buf.getvalue())
