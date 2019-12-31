@@ -66,7 +66,7 @@ def draw_picture(f):
                 bit.label = None
 
     masked.draw(f)
-    draw_label(f, masked.lt, r'\texttt{masked = mask \& input}', 'anchor=south west')
+    draw_label(f, masked.lt, r'\texttt{t04 = mask \& input}', 'anchor=south west')
 
     y -= 2.5*h
 
@@ -94,7 +94,7 @@ def draw_picture(f):
 
     draw_horiz_brace(f, byte0.bit[4].right.x, byte0.bit[7].left.x, byte0.bottom.y,
                      '0x%02x' % bit4sum, 'below')
-    draw_label(f, sadbw.lt, r'\texttt{sum04 = VPSADBW(masked, zero)}', 'anchor=south west')
+    draw_label(f, sadbw.lt, r'\texttt{sum04 = VPSADBW(t04, zero)}', 'anchor=south west')
 
 
 if __name__ == '__main__':
