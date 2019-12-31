@@ -105,7 +105,7 @@ def draw_reshuffled(f):
 
     reshuffled(y - 0*H, (0, 4, 1, 5), r'\texttt{g0}')
     reshuffled(y - 1*H, (2, 6, 3, 7), r'\texttt{g1}')
-    reshuffled(y - 2*H, (0, 1, 2, 4, 5, 6, 7), r'\texttt{t0}')
+    reshuffled(y - 2*H, (0, 1, 2, 3, 4, 5, 6, 7), r'\texttt{t0}')
 
 
 if __name__ == '__main__':
