@@ -2,4 +2,5 @@
 *.log
 *.aux
 *.tex
+*.png
 __pycache__
