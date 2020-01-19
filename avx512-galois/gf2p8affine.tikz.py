@@ -21,7 +21,7 @@ class AVX512Lane(Rectangle):
 
     def draw(self, file):
         for byte in self.byte:
-            byte.draw(file)
+            file.draw(byte)
 
 
     def draw_indices(self, file):
@@ -66,7 +66,7 @@ def draw_register(file, reg, name):
         file.hline(y, reg.right.x, reg.right.x + margin_right, "dashed")
 
     file.label(reg.left, name, "anchor=east")
-    reg.draw(file)
+    file.draw(reg)
 
 
 def draw_step(file):
@@ -157,17 +157,17 @@ def draw_step(file):
 
     draw_register(file, const_lane, texttt("A"))
     draw_register(file, var_lane, texttt("x"))
-    var_lane.draw_indices(file)
+    file.draw(var_lane)
 
-    lane_in0.draw(file)
+    file.draw(lane_in0)
     lane_in0.draw_indices(file)
     file.label(lane_in0.left, texttt("rev(A[j])"), "anchor=east")
-    lane_in1.draw(file)
+    file.draw(lane_in1)
     lane_in1.draw_indices(file)
     file.label(lane_in1.left, texttt("x[j][%d]" % algorithm.i), "anchor=east")
 
 
-    lanes_anded.draw(file)
+    file.draw(lanes_anded)
     file.label(lanes_anded.left, texttt("tmp"), "anchor=east")
     for byte in lanes_anded.bytes:
         file.label(byte.top, r"\tiny{result bit %d}" % byte.index, "anchor=south")

@@ -212,6 +212,9 @@ class File:
         self.file.write(s)
         self.file.write('\n')
 
+    def draw(self, obj):
+        obj.draw(self)
+
     def rectangle(self, p0, p1, style=''):
         self.writeln(r'\draw [%s] (%s) rectangle (%s);' % (style, p0, p1))
 
