@@ -1,7 +1,14 @@
 main.pdf: main.tex gf2p8affine.tex
 	pdflatex main.tex
 
-png: pgf2p8affine.png
+png: gf2p8affine.png
 
-gf2p8affine.tex: gf2p8affine.tikz.py tikz.py
+DEPS=gf2p8affine.tikz.py gf2p8affine.py tikz.py
+
+gf2p8affine.tex: $(DEPS)
 	python3 gf2p8affine.tikz.py $@
+
+TIKZ2PNG=tikz2png --background white --quality 200
+
+%.png: %.tex
+	$(TIKZ2PNG) -i $<

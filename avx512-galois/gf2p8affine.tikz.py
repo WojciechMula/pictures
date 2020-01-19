@@ -1,5 +1,5 @@
 import sys
-import itertools
+import argparse
 
 from io import StringIO
 from tikz import *
@@ -69,18 +69,7 @@ def draw_register(file, reg, name):
     file.draw(reg)
 
 
-def draw_step(file):
-
-    algorithm = Struct()
-
-    algorithm.order = [0, 4, 1, 5, 2, 6, 3, 7]
-    algorithm.lane0 = [1 << i for i in reversed(algorithm.order)]
-    algorithm.lane1 = [0xfa, 0x45, 0x89, 0x13, 0x78, 0x65, 0xfc, 0x0b]
-    algorithm.lane0reversed = list(reversed(algorithm.lane0))
-    algorithm.i = 4
-    algorithm.lane1populated = [algorithm.lane1[algorithm.i]] * 8
-    algorithm.lanes_anded = [a & b for a, b in zip(algorithm.lane0reversed, algorithm.lane1populated)]
-    algorithm.result = sum(parity(x) << i for i, x in enumerate(algorithm.lanes_anded))
+def draw_step(file, algorithm):
 
     x  = 0
     y  = 0
@@ -92,26 +81,26 @@ def draw_step(file):
     y -= H + vs
     var_lane   = AVX512Lane(x, y, W, H, algorithm.lane1, byte_cls=WHOLE_BYTE)
     for byte in var_lane.byte:
-        if byte.index == algorithm.i:
+        if byte.index == algorithm.index:
             byte.style = active_byte
         else:
             byte.style = inactive_byte
 
     y -= H + 4*vs
-    
+
     lane_in0 = AVX512Lane(x, y, W, H, algorithm.lane0reversed)
     for byte in lane_in0.byte:
-        byte.index = 7 - byte.index 
+        byte.index = 7 - byte.index
         byte.index_label = "\\tiny{byte %d}" % byte.index
 
     for byte in lane_in0.byte:
         index = bfs(byte.value)
         byte.bit[index].style = active_bit
 
-    y -= H + 2*vs 
+    y -= H + 2*vs
     lane_in1 = AVX512Lane(x, y, W, H, algorithm.lane1populated)
     for byte in lane_in1.byte:
-        byte.index = algorithm.i
+        byte.index = algorithm.index
         byte.index_label = "\\tiny{byte %d}" % byte.index
         for bit in byte.bit:
             if bit.index < 4:
@@ -134,12 +123,12 @@ def draw_step(file):
                 bit.label = ''
     y -= H + vs
 
-    y -= 5*vs 
+    y -= 5*vs
 
     lane_result = AVX512Lane(x, y, W, H, [0]*8, byte_cls=WHOLE_BYTE)
     for i in range(8):
         byte = lane_result.byte[i]
-        if byte.index != algorithm.i:
+        if byte.index != algorithm.index:
             byte.label = ''
             byte.style = inactive_byte
         else:
@@ -164,7 +153,7 @@ def draw_step(file):
     file.label(lane_in0.left, texttt("rev(A[j])"), "anchor=east")
     file.draw(lane_in1)
     lane_in1.draw_indices(file)
-    file.label(lane_in1.left, texttt("x[j][%d]" % algorithm.i), "anchor=east")
+    file.label(lane_in1.left, texttt("x[j][%d]" % algorithm.index), "anchor=east")
 
 
     file.draw(lanes_anded)
@@ -175,15 +164,15 @@ def draw_step(file):
             if not bit.label:
                 continue
             bit.draw_index(file)
-        
+
     draw_register(file, lane_result, texttt("dst"))
 
     for i in range(8):
-        result_byte = lane_result.byte[algorithm.i]
+        result_byte = lane_result.byte[algorithm.index]
         for bit in lanes_anded.byte[i].bits:
             if not bit.label:
                 continue
-            
+
             file.line(result_byte.bit[i].top, bit.bottom, "line width=0.5")
 
     # labels
@@ -192,13 +181,13 @@ def draw_step(file):
         p1 = Point(xc + width/2, yc + height/2)
         file.rectangle(p0, p1, style)
         file.label(Point(xc, yc), label)
-        
+
     picture_label(lanes_anded.top.x, (lanes_anded.top.y + lane_in1.bottom.y) / 2,
                   lanes_anded.w + 0.4, 0.4,
-                  texttt(r"tmp = rev(A[j]) \& x[j][%d]" % algorithm.i),
+                  texttt(r"tmp = rev(A[j]) \& x[j][%d]" % algorithm.index),
                   'fill=yellow!25,rounded corners=5pt')
 
-    b = lane_result.byte[algorithm.i]
+    b = lane_result.byte[algorithm.index]
     picture_label(b.top.x, ((b.top + lanes_anded.bottom) / 2).y, 5, 0.5,
                   r"$\textrm{bit}_i$ = \texttt{parity(tmp.byte[i])}",
                   'fill=yellow!25,rounded corners=5pt')
@@ -207,11 +196,48 @@ def draw_step(file):
                    'blue,dashed,thick,rounded corners=10pt')
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+
+    def intlist(s):
+        return map(int, s.split(','))
+
+    def hexlist(s):
+        return map(lambda x: int(x, 16), s.split(','))
+
+    parser.add_argument("path",
+                        help="output TeX file name")
+    parser.add_argument("--index", type=int,
+                        help="input index (0..7)",
+                        default=4)
+    parser.add_argument("--order", type=intlist,
+                        help="bit order given as 8 numbers spearate by the comma",
+                        default=[0, 4, 1, 5, 2, 6, 3, 7])
+    parser.add_argument("--input", type=hexlist,
+                        help="input bytes given as 8 hex values separate by the comma",
+                        default=[0xfa, 0x45, 0x89, 0x13, 0x78, 0x65, 0xfc, 0x0b])
+    parser.add_argument("--allsteps", action="store_true",
+                        help="perform all steps from 0 to index",
+                        default=False)
+
+    return parser.parse_args()
+
+
 if __name__ == '__main__':
     buf = StringIO()
     buf.write(r"\begin{tikzpicture}")
-    draw_step(File(buf))
+
+    args = parse_args()
+    if args.allsteps:
+        algorithm = Algorithm(0, args.order, args.input)
+        for index in range(args.index + 1):
+            algorithm.index = index
+    else:
+        algorithm = Algorithm(args.index, args.order, args.input)
+
+
+    draw_step(File(buf), algorithm)
     buf.write(r"\end{tikzpicture}")
 
-    with open(sys.argv[1], 'wt') as f:
+    with open(args.path, 'wt') as f:
         f.write(buf.getvalue())
