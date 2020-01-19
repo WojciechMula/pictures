@@ -34,8 +34,8 @@ def draw_picture(f):
             else:
                 bit.style = inactive
 
-    input.draw(f)
-    draw_label(f, input.lt, r'\texttt{input}', 'anchor=south west')
+    f.draw(input)
+    f.label(input.lt, r'\texttt{input}', 'anchor=south west')
     for i, byte in enumerate(input.byte):
         draw_horiz_brace(f, byte.right.x, byte.left.x, byte.bottom.y,
                          f'$b_{i}$ = 0x{byte.value:02x}', 'below')
@@ -49,8 +49,8 @@ def draw_picture(f):
             if j not in (0, 4):
                 bit.style = inactive
 
-    mask.draw(f)
-    draw_label(f, mask.lt, r'\texttt{mask}', 'anchor=south west')
+    f.draw(mask)
+    f.label(mask.lt, r'\texttt{mask}', 'anchor=south west')
 
     y -= 2.5*h
 
@@ -66,7 +66,7 @@ def draw_picture(f):
                 bit.label = None
 
     masked.draw(f)
-    draw_label(f, masked.lt, r'\texttt{t04 = mask \& input}', 'anchor=south west')
+    f.label(masked.lt, r'\texttt{t04 = mask \& input}', 'anchor=south west')
 
     y -= 2.5*h
 
@@ -94,7 +94,7 @@ def draw_picture(f):
 
     draw_horiz_brace(f, byte0.bit[4].right.x, byte0.bit[7].left.x, byte0.bottom.y,
                      '0x%02x' % bit4sum, 'below')
-    draw_label(f, sadbw.lt, r'\texttt{sum04 = VPSADBW(t04, zero)}', 'anchor=south west')
+    f.label(sadbw.lt, r'\texttt{sum04 = VPSADBW(t04, zero)}', 'anchor=south west')
 
 
 if __name__ == '__main__':

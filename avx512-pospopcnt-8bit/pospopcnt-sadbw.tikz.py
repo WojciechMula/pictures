@@ -74,14 +74,14 @@ def draw_byte_layout(f):
                 reg.byte[i].style = inactive
 
 
-    sum04.draw(f)
-    draw_label(f, sum04.left, r'\texttt{sum04}', 'left')
-    sum15.draw(f)
-    draw_label(f, sum15.left, r'\texttt{sum15}', 'left')
-    sum26.draw(f)
-    draw_label(f, sum26.left, r'\texttt{sum26}', 'left')
-    sum37.draw(f)
-    draw_label(f, sum37.left, r'\texttt{sum37}', 'left')
+    f.draw(sum04)
+    f.label(sum04.left, r'\texttt{sum04}', 'left')
+    f.draw(sum15)
+    f.label(sum15.left, r'\texttt{sum15}', 'left')
+    f.draw(sum26)
+    f.label(sum26.left, r'\texttt{sum26}', 'left')
+    f.draw(sum37)
+    f.label(sum37.left, r'\texttt{sum37}', 'left')
 
 
 def draw_reshuffled(f):
@@ -100,8 +100,8 @@ def draw_reshuffled(f):
             else:
                 reg.byte[i].style = inactive
 
-        reg.draw(f)
-        draw_label(f, reg.left, label, 'left')
+        f.draw(reg)
+        f.label(reg.left, label, 'left')
 
     reshuffled(y - 0*H, (0, 4, 1, 5), r'\texttt{g0}')
     reshuffled(y - 1*H, (2, 6, 3, 7), r'\texttt{g1}')
