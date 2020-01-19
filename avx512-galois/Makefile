@@ -1,6 +1,3 @@
-main.pdf: main.tex gf2p8affine.tex
-	pdflatex main.tex
-
 png: gf2p8affine.png
 
 DEPS=gf2p8affine.tikz.py gf2p8affine.py tikz.py

@@ -59,8 +59,8 @@ inactive_byte = 'fill=gray!15'
 
 
 def draw_register(file, reg, name):
-    margin_left = 1.0
-    margin_right = 0.4
+    margin_left = 2.2
+    margin_right = 0.8
     for y in reg.top.y, reg.bottom.y:
         file.hline(y, reg.left.x - margin_left, reg.left.x, "dashed")
         file.hline(y, reg.right.x, reg.right.x + margin_right, "dashed")
