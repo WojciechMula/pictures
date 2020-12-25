@@ -1,3 +1,5 @@
+from io import StringIO
+
 # model of flags word
 
 class Point:
@@ -221,8 +223,11 @@ def draw_horiz_brace(file, x0, x1, y, label, orientation='above'):
 
 
 class File:
-    def __init__(self, file):
-        self.file = file
+    def __init__(self, file=None):
+        if file is None:
+            self.file = StringIO()
+        else:
+            self.file = file
 
     def writeln(self, s):
         self.file.write(s)
@@ -245,3 +250,8 @@ class File:
 
     def hline(self, y, x0, x1, style=''):
         self.writeln(r"\draw[%s] (%0.2f,%0.2f) -- (%0.2f,%0.2f);" % (style, x0, y, x1, y))
+
+    def save(self, fileobj):
+        fileobj.write(r"\begin{tikzpicture}" + '\n')
+        fileobj.write(self.file.getvalue())
+        fileobj.write(r"\end{tikzpicture}" + '\n')

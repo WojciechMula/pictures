@@ -80,11 +80,8 @@ def draw(file):
 
 
 if __name__ == '__main__':
-    buf = StringIO()
-    buf.write(r"\begin{tikzpicture}")
-
-    draw(File(buf))
-    buf.write(r"\end{tikzpicture}")
+    file = File()
+    draw(file)
 
     with open(sys.argv[1], 'wt') as f:
-        f.write(buf.getvalue())
+        file.save(f)
