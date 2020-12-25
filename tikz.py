@@ -52,6 +52,22 @@ class Rectangle:
     def rb(self):
         return Point(self.x + self.w, self.y)
 
+    @property
+    def bottom_left(self):
+        return Point(self.x, self.y)
+
+    @property
+    def bottom_right(self):
+        return Point(self.x + self.w, self.y)
+
+    @property
+    def top_left(self):
+        return Point(self.x, self.y + self.h)
+
+    @property
+    def top_right(self):
+        return Point(self.x + self.w, self.y + self.h)
+
 
 class LabelledRectangle(Rectangle):
     def __init__(self, x, y, width, height):
