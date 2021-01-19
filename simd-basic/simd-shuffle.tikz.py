@@ -53,11 +53,11 @@ def draw(file, type):
     for i in range(8):
         f = vec1.byte[v2[i]].bottom
         t = vec2.byte[i].top
-        file.line(f, t, 'dotted')
+        file.line(f, t, 'very thin,->')
 
         file.line(vec2.byte[i].bottom,
                   vec3.byte[i].top,
-                  'dotted')
+                  'very thin,->')
 
     file.label(vec1.left, "$a=$", "anchor=east")
     file.label(vec2.left, "$b=$", "anchor=east")

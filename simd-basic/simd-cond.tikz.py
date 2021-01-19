@@ -67,23 +67,28 @@ def draw(file):
     for i in range(8):
         dx = 0.2 * d
 
+        color = None
+
         if v3[i]:
             f = vec1.byte[i].bottom
-            t = vec3.byte[i].bottom
+            t = vec3.byte[i].top
 
             f.x += dx
             t.x += dx
-            file.line(f, t)
+            color = "blue!75"
+            file.line(f, t, f'color={color},->')
         else:
             f = vec2.byte[i].bottom
-            t = vec3.byte[i].bottom
+            t = vec3.byte[i].top
 
             f.x -= dx
             t.x -= dx
-            file.line(f, t)
+            color = "green!75"
+            file.line(f, t, f'color={color},->')
 
         file.line(vec3.byte[i].bottom,
-                  vec4.byte[i].top)
+                  vec4.byte[i].top,
+                  f'color={color},->')
 
 
     file.label(vec1.left, "$a=$", "anchor=east")

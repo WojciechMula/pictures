@@ -52,13 +52,13 @@ def draw(file):
         t2.x += s * d
         t2.y  = m.y
 
-        file.line(f1, t1, 'dotted')
-        file.line(f2, t2, 'dotted')
+        file.line(f1, t1, 'very thin,->')
+        file.line(f2, t2, 'very thin,->')
 
         t3 = vec3.byte[i].top
         f3 = Point(t3.x, m.y)
 
-        file.line(f3, t3, 'dotted')
+        file.line(f3, t3, 'very thin,->')
 
 
     def picture_label(xc, yc, width, height, label, style=''):
