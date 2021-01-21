@@ -8,6 +8,10 @@ def draw(file):
     y = 0.0
     d = 0.5
 
+    v1color = 'blue'
+    v2color = 'red'
+    transparency = 25
+
     v1 = [2, 7, 8, 9, 1, 12, 5, 12]
     v2 = [8, 1, 13, 9, 5, 41, 0, 2]
     v3 = [a + b for a,b in zip(v1, v2)]
@@ -19,12 +23,13 @@ def draw(file):
     vec1 = QWORD(x, y, 8*d, d, WHOLE_BYTE)
     for byte, value in zip(vec1.byte, v1):
         byte.label = texttt('%d' % value)
+        byte.style = f'fill={v1color}!{transparency}'
 
     y -= 2*d
 
     vec2 = QWORD(x, y, 8*d, d, WHOLE_BYTE)
     for byte, value in zip(vec2.byte, v2):
-        byte.style = 'fill=white'
+        byte.style = f'fill={v2color}!{transparency}'
         byte.label = texttt('%d' % value)
 
     y -= 4*d
@@ -43,17 +48,17 @@ def draw(file):
         
         f1.x -= s * d
         t1.x -= s * d
-        t1.y  = m.y
+        t1.y  = m.y + d/2
 
         f2 = vec2.byte[i].bottom
         t2 = vec3.byte[i].top
         
         f2.x += s * d
         t2.x += s * d
-        t2.y  = m.y
+        t2.y  = m.y + d/2
 
-        file.line(f1, t1, 'very thin,->')
-        file.line(f2, t2, 'very thin,->')
+        file.line(f1, t1, f'->,color={v1color}')
+        file.line(f2, t2, f'->,color={v2color}')
 
         t3 = vec3.byte[i].top
         f3 = Point(t3.x, m.y)
