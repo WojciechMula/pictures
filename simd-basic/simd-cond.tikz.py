@@ -1,7 +1,6 @@
 import sys
 
 from tikz import *
-from io import StringIO
 
 def draw(file):
     x = 0.0

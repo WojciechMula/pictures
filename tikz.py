@@ -70,6 +70,10 @@ class Rectangle:
     def top_right(self):
         return Point(self.x + self.w, self.y + self.h)
 
+    @property
+    def center(self):
+        return Point(self.x + self.w / 2, self.y + self.h / 2)
+
 
 class LabelledRectangle(Rectangle):
     def __init__(self, x, y, width, height):
@@ -229,6 +233,9 @@ class File:
         else:
             self.file = file
 
+    def write(self, s):
+        self.file.write(s)
+
     def writeln(self, s):
         self.file.write(s)
         self.file.write('\n')
@@ -244,6 +251,14 @@ class File:
 
     def line(self, p0, p1, style=''):
         self.writeln(r"\draw[%s] (%s) -- (%s);" % (style, p0, p1))
+
+    def polyline(self, points, style=''):
+        iterator = iter(points)
+        first = next(iterator)
+        self.write(r"\draw[%s] (%s)" % (style, first))
+        for point in iterator:
+            self.write(' -- (%s)' % point)
+        self.writeln(';')
 
     def vline(self, x, y0, y1, style=''):
         self.writeln(r"\draw[%s] (%0.2f,%0.2f) -- (%0.2f,%0.2f);" % (style, x, y0, x, y1))
