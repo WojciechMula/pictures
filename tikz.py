@@ -149,6 +149,53 @@ class BYTE(Rectangle):
                      (self.bottom.x, self.bottom.y, label))
 
 
+class WORD(Rectangle):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
+        self.style = ''
+        self.index = 0
+        self.index_label = None
+        self.__value = None
+
+        self.bit = []
+        w = width/16
+        for i in range(16):
+            self.bit.append(BIT(x + (15-i) * w, y, w, height, '', '', i))
+
+    
+    @property
+    def bits(self):
+        return self.bit
+
+
+    @property
+    def value(self):
+        return self.__value
+
+
+    @value.setter
+    def value(self, value):
+        assert value >= 0 and value <= 0xffff
+        self.__value = value
+        for i in range(16):
+            v = value & (1 << i)
+            if v:
+                self.bit[i].label = '1'
+            else:
+                self.bit[i].label = '0'
+
+
+    def draw(self, file):
+        for bit in self.bit:
+            bit.draw(file)
+
+
+    def draw_index(self, file):
+        label = self.index_label or f"\\tiny{self.index}"
+        file.writeln(r'\node[below] at (%0.2f, %0.2f) {%s};' %
+                     (self.bottom.x, self.bottom.y, label))
+
+
 class QWORD(Rectangle):
     def __init__(self, x, y, width, height, byte_cls=BYTE):
         super().__init__(x, y, width, height)
