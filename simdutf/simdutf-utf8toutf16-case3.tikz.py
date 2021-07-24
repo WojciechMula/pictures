@@ -12,17 +12,6 @@ def main():
         file.save(f)
 
 
-UTF8_BIT  = 'fill=gray!50'
-UTF16_BIT = 'fill=gray!50'
-MASKED   = ''
-UNUSED   = 'fill=gray!25'
-ASCII    = 'fill=yellow!50'
-BYTE0    = 'fill=blue!50'
-BYTE1    = 'fill=green!50'
-BYTE2    = 'fill=red!50'
-BYTE3    = 'fill=magenta!50'
-
-
 def decompose(s):
     result = []
     for c in s:
@@ -224,64 +213,6 @@ def as_spec(byte):
         return [(UTF8_BIT, bits[0:2]), (BYTE3, bits[2:8])]
 
     assert False
-
-
-class BitStream(Rectangle):
-    def __init__(self, x, y, w, h, spec):
-        self.bits = []
-        for style, bits in spec:
-            for label in bits:
-                fmt = r"\tiny{%s}" % label
-                B = BIT(x, y, w, h, fmt, style, None)
-                B.value = bool(int(label))
-                self.bits.append(B)
-                x += w
-
-        self.x = x
-        self.y = y
-        self.w = len(self.bits) * w
-        self.h = h
-
-
-    def top_brace(self, file, b0, b1, label):
-        p1 = self.bits[b0].top_left
-        p2 = self.bits[b1].top_right
-
-        draw_horiz_brace(file, p1.x, p2.x, p1.y, label)
-
-
-    def bottom_brace(self, file, b0, b1, label):
-        p1 = self.bits[b0].bottom_left
-        p2 = self.bits[b1].bottom_right
-
-        draw_horiz_brace(file, p2.x, p1.x, p1.y, label, 'below')
-
-
-    def bin_string(self):
-        return ''.join('1' if bit.value else '0' for bit in self.bits)
-
-
-    def spec(self):
-        return [(bit.style, '1' if bit.value else '0') for bit in self.bits]
-
-    
-    def draw(self, file):
-        for bit in self.bits:
-            bit.draw(file)
-
-
-class BitStreamHighdword(BitStream):
-    def draw(self, file):
-        for bit in self.bits[:32]:
-            bit.draw(file)
-
-
-def unused(n):
-    return (UNUSED, '0' * n)
-
-
-def masked(n):
-    return (MASKED, '0' * n)
 
 
 def prepare_input(ctx, bytes):
@@ -551,14 +482,6 @@ def prepare_surrogates(ctx, lowtenbitsadd_shifted, hightenbitsadd):
 
     return bit_stream_highdword(ctx.x, ctx.y, ctx.d, ctx.h, spec)
 
-
-def bit_stream(*args):
-    return BitStream(*args)
-
-
-def bit_stream_highdword(*args):
-    return BitStreamHighdword(*args)
-    
 
 if __name__ == '__main__':
     main()
