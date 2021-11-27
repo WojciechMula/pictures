@@ -27,7 +27,7 @@ __ https://github.com/WojciechMula/tikz2png
 
   __ http://0x80.pl/articles/avx512-pospopcnt-8bit.html
 
-* **jpeg-zig-zag** --- picture for `AVX512 implementation of JPEG zigzag transformation`__
+* **jpeg-zig-zag** --- pictures for `AVX512 implementation of JPEG zigzag transformation`__
 
   .. image:: jpeg-zig-zag/zigzag_thumb.png
 
@@ -47,7 +47,7 @@ __ https://github.com/WojciechMula/tikz2png
 
   __ https://github.com/WojciechMula/presentations/tree/main/vector-instructions
 
-* **simdutf** -- picture for `Transcoding Billions of Unicode Characters per Second with SIMD Instructions`__
+* **simdutf** -- pictures for `Transcoding Billions of Unicode Characters per Second with SIMD Instructions`__
 
   .. image:: simdutf/simdutf-utf8toutf16-case1.png
 
