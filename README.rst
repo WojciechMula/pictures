@@ -33,7 +33,7 @@ __ https://github.com/WojciechMula/tikz2png
 
   __ http://0x80.pl/notesen/2018-05-13-avx512-jpeg-zigzag-transform.html
 
-* **simd-basic** --- pictures for my presentation (not published yet)
+* **simd-basic** --- pictures for `my presentation`__
 
   .. image:: simd-basic/simd-cond_thumb.png
 
@@ -44,3 +44,5 @@ __ https://github.com/WojciechMula/tikz2png
   .. image:: simd-basic/simd-shuffle-sample_thumb.png
 
   .. image:: simd-basic/simd-vertop_thumb.png
+
+  __ https://github.com/WojciechMula/presentations/tree/main/vector-instructions
