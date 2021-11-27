@@ -46,3 +46,15 @@ __ https://github.com/WojciechMula/tikz2png
   .. image:: simd-basic/simd-vertop_thumb.png
 
   __ https://github.com/WojciechMula/presentations/tree/main/vector-instructions
+
+* **simdutf** -- picture for `Transcoding Billions of Unicode Characters per Second with SIMD Instructions`__
+
+  .. image:: simdutf/simdutf-utf8toutf16-case1.png
+
+  .. image:: simdutf/simdutf-utf8toutf16-case2.png
+
+  .. image:: simdutf/simdutf-utf8toutf16-case3.png
+
+  .. image:: simdutf/simdutf-mapping-all.png
+
+  __ https://arxiv.org/abs/2109.10433
