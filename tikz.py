@@ -272,6 +272,8 @@ def draw_horiz_brace(file, x0, x1, y, label, orientation='above'):
                  r"(%0.2f, %0.2f) -- (%0.2f, %0.2f) node [midway,%s,yshift=%dpt] {%s};" %
                  (x0, y, x1, y, orientation, yshift, label))
 
+def draw_index(file, p, index):
+    file.writeln(r'\node[below] at (%0.2f, %0.2f) {%s};' % (p.x, p.y, f"\\tiny{index}"))
 
 class File:
     def __init__(self, file=None):
