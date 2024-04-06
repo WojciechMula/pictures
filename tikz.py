@@ -22,6 +22,12 @@ class Point:
     def __repr__(self):
         return '<Point %s>' % self
 
+    def dx(self, dx):
+        return Point(self.x + dx, self.y)
+
+    def dy(self, dy):
+        return Point(self.x, self.y + dy)
+
 
 class Rectangle:
     def __init__(self, x, y, width, height):
@@ -87,6 +93,22 @@ class LabelledRectangle(Rectangle):
 
         if self.label:
             file.writeln(r'\node at (%0.2f, %0.2f) {%s};' % (self.x + self.w/2, self.y + self.h/2, self.label))
+
+
+class LabelledCircle(Rectangle):
+    def __init__(self, center, radious):
+        super().__init__(center.x - radious, center.y - radious, 2 * radious, 2 * radious)
+        self.pc = center
+        self.radious = radious
+        self.style = ''
+        self.label = None
+
+    def draw(self, file):
+        file.writeln(r'\draw [%s] (%0.2f, %0.2f) circle (%0.2f);' %
+                    (self.style, self.center.x, self.center.y, self.radious))
+
+        if self.label:
+            file.writeln(r'\node at (%0.2f, %0.2f) {%s};' % (self.pc.x, self.pc.y, self.label))
 
 
 class BIT(LabelledRectangle):
@@ -250,6 +272,10 @@ def texttt(s):
 
 def bold(s):
     return r'\textbf{%s}' % s
+
+
+def small(s):
+    return r'\tiny{%s}' % s
 
 
 def draw_description(file, x0, y0, x1, y1, label, anchor):
