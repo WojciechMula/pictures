@@ -1,6 +1,7 @@
 png: vector-layout.png \
      reduce.png \
-     compress.png
+     compress.png \
+     iota.png
 
 DEPS=tikz.py
 
@@ -13,7 +14,10 @@ reduce.tex: reduce.tikz.py $(DEPS)
 compress.tex: compress.tikz.py $(DEPS)
 	python3 compress.tikz.py $@
 
-TIKZ2PNG=tikz2png --background white --quality 200 --debug --keep-tmp-files
+iota.tex: iota.tikz.py $(DEPS)
+	python3 iota.tikz.py $@
+
+TIKZ2PNG=tikz2png --background white --quality 200 --keep-tmp-files
 
 %.png: %.tex
 	$(TIKZ2PNG) -i $<
