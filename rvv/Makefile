@@ -1,5 +1,6 @@
 png: vector-layout.png \
-     reduce.png
+     reduce.png \
+     compress.png
 
 DEPS=tikz.py
 
@@ -8,6 +9,9 @@ vector-layout.tex: vector-layout.tikz.py $(DEPS)
 
 reduce.tex: reduce.tikz.py $(DEPS)
 	python3 reduce.tikz.py $@
+
+compress.tex: compress.tikz.py $(DEPS)
+	python3 compress.tikz.py $@
 
 TIKZ2PNG=tikz2png --background white --quality 200 --debug --keep-tmp-files
 
